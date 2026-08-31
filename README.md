@@ -48,6 +48,8 @@ src/test/java/
 └── users/
     ├── users-crud.feature        # Los 11 casos de prueba (CRUD completo)
     ├── create-user.feature       # Feature reutilizable: crea un usuario y expone su _id/email
+    ├── data/
+    │   └── new-user.json     # Payload base de creación de usuario (externalizado)
     ├── schemas/
     │   └── user-schema.js        # JSON Schema para validar la estructura de un usuario
     └── helpers/

@@ -20,6 +20,8 @@ Ninguna prueba se escribió antes de confirmar el comportamiento real de la API.
 
 **Generación de datos en Java, no en JavaScript.** Karate permite helpers en JS, pero se optó por una clase Java (`users.helpers.DataGenerator`) invocada con `Java.type()`. Ventajas: tipado estático, compilación verificada por Maven, depurable desde el IDE y coherente con el stack del proyecto — evita mezclar dos lenguajes de scripting para una sola responsabilidad.
 
+**Externalización selectiva de payloads.** El payload de creación de usuario se movió a `data/new-user.json` y se carga con `read()`, que resuelve las expresiones embebidas (`#(generatedEmail)`) contra el scope del escenario. Era el único payload embebido como bloque de texto multilínea y el único reutilizado —los 13 escenarios del CRUD dependen de él—, por lo que externalizarlo separa el dato de la lógica sin costo de legibilidad. Los demás payloads permanecen inline: son mapas JSON de una línea, sintaxis nativa de Karate, de un solo uso, y su contenido concreto *es* lo que define cada caso de prueba (por ejemplo, reutilizar el email de un usuario ya creado para probar el rechazo por duplicado). Moverlos a archivos externos obligaría a saltar entre archivos para entender un test sin aportar reutilización.
+
 ## Hallazgos relevantes durante la investigación
 
 - **Los mensajes de error de campos obligatorios no están documentados en el esquema OpenAPI**, pero siguen un patrón consistente y predecible (`{"<campo>": "<campo> é obrigatório"}`), confirmado experimentalmente para los 4 campos del recurso usuario.
