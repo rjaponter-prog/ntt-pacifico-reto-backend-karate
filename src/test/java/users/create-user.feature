@@ -1,12 +1,13 @@
 Feature: Crear usuario (reutilizable)
 
   Scenario:
-    * def dataGen = call read('helpers/data-generator.js')
+    * def DataGenerator = Java.type('users.helpers.DataGenerator')
+    * def generatedEmail = DataGenerator.generateUniqueEmail()
     * def userPayload =
       """
       {
         "nome": "Usuario Karate Test",
-        "email": "#(dataGen.email)",
+        "email": "#(generatedEmail)",
         "password": "teste123",
         "administrador": "true"
       }

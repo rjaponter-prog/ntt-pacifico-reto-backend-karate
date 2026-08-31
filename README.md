@@ -28,6 +28,7 @@ Clona el repositorio y, desde la raíz del proyecto, ejecuta:
 ```
 ./mvnw clean test
 ```
+En Windows, usa `mvnw.cmd clean test` en lugar de `./mvnw clean test.`
 
 Esto compila el proyecto y ejecuta 14 escenarios en total (13 correspondientes a los 11 casos de la matriz, más 1 del feature auxiliar de creación de usuario), generando automáticamente un reporte HTML.
 
@@ -50,7 +51,7 @@ src/test/java/
     ├── schemas/
     │   └── user-schema.js        # JSON Schema para validar la estructura de un usuario
     └── helpers/
-        └── data-generator.js     # Genera emails únicos por ejecución (evita colisiones)
+        └── DataGenerator.java    # Clase Java que genera emails únicos por ejecución (evita colisiones)
 ```
 
 
@@ -75,7 +76,7 @@ src/test/java/
 
 **Independencia entre tests:** cada Scenario que necesita un usuario preexistente lo crea por su cuenta llamando a `create-user.feature` (vía `call read(...)`), en lugar de depender de que otro test se ejecute antes. Esto permite correr cualquier escenario de forma aislada sin efectos colaterales.
 
-**Datos dinámicos:** los emails se generan con un timestamp (`helpers/data-generator.js`) para que la suite pueda ejecutarse repetidamente sin chocar con registros de ejecuciones anteriores.
+**Datos dinámicos:** los emails se generan con un timestamp mediante la clase Java `users.helpers.DataGenerator`, invocada desde los features con `Java.type()`, evitando colisiones entre ejecuciones.
 
 **Verificación cruzada (CT-08 y CT-11):** actualizar o eliminar un usuario no solo valida el mensaje de éxito de la API, sino que hace una llamada GET adicional para confirmar que el cambio realmente ocurrió en el sistema.
 

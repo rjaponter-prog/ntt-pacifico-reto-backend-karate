@@ -12,11 +12,13 @@ Ninguna prueba se escribió antes de confirmar el comportamiento real de la API.
 
 **Independencia entre tests.** Cada Scenario que necesita un usuario preexistente lo crea por su cuenta mediante un feature reutilizable (`create-user.feature`, invocado con `call read(...)`), en lugar de depender del orden de ejecución de otros tests. Esto permite ejecutar cualquier caso de forma aislada sin efectos colaterales, y facilita el debugging y un futuro paralelismo.
 
-**Datos dinámicos.** Los correos electrónicos usados para crear usuarios se generan con un timestamp (`helpers/data-generator.js`), evitando colisiones por duplicado si la suite se ejecuta más de una vez contra el mismo entorno.
+**Datos dinámicos:** los emails se generan con un timestamp mediante la clase Java `users.helpers.DataGenerator`, invocada desde los features con `Java.type()`, evitando colisiones entre ejecuciones.
 
 **Validación de tipos sobre las respuestas.** Se usó el mecanismo de matching de tipos propio de Karate (`#string`, `#array`, `#number`) para validar la estructura de las respuestas, no solo sus valores concretos. No se utilizó una librería de JSON Schema formal (draft estándar) porque el matching nativo de Karate cumple el mismo propósito — validar forma, no solo contenido — sin introducir una dependencia adicional para el alcance de este reto.
 
 **Verificación cruzada en operaciones de escritura.** Los casos de actualización (CT-08) y eliminación (CT-11) no se dan por válidos únicamente con el mensaje de éxito de la API — cada uno hace una llamada GET adicional para confirmar que el cambio ocurrió realmente en el sistema. Esta decisión surgió tras comprobar que un status 200 en `DELETE` no siempre implica que algo fue eliminado (ver hallazgos).
+
+**Generación de datos en Java, no en JavaScript.** Karate permite helpers en JS, pero se optó por una clase Java (`users.helpers.DataGenerator`) invocada con `Java.type()`. Ventajas: tipado estático, compilación verificada por Maven, depurable desde el IDE y coherente con el stack del proyecto — evita mezclar dos lenguajes de scripting para una sola responsabilidad.
 
 ## Hallazgos relevantes durante la investigación
 

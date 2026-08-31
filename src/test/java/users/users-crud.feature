@@ -60,8 +60,9 @@ Feature: CRUD de usuarios - ServeRest
 
   Scenario: CT-08 - Actualizar usuario y confirmar el cambio real
     * def created = call read('create-user.feature')
-    * def dataGen = call read('helpers/data-generator.js')
-    * def updatedPayload = { nome: 'Usuario Actualizado', email: '#(dataGen.email)', password: 'nuevaClave123', administrador: 'false' }
+    * def DataGenerator = Java.type('users.helpers.DataGenerator')
+    * def generatedEmail = DataGenerator.generateUniqueEmail()
+    * def updatedPayload = { nome: 'Usuario Actualizado', email: '#(generatedEmail)', password: 'nuevaClave123', administrador: 'false' }
     Given path 'usuarios', created.createdUserId
     And request updatedPayload
     When method put
@@ -75,8 +76,9 @@ Feature: CRUD de usuarios - ServeRest
     And match response.email == updatedPayload.email
 
   Scenario: CT-09 - Actualizar con ID inexistente crea un usuario nuevo
-    * def dataGen = call read('helpers/data-generator.js')
-    * def payload = { nome: 'Usuario Via PUT', email: '#(dataGen.email)', password: 'teste123', administrador: 'false' }
+    * def DataGenerator = Java.type('users.helpers.DataGenerator')
+    * def generatedEmail = DataGenerator.generateUniqueEmail()
+    * def payload = { nome: 'Usuario Via PUT', email: '#(generatedEmail)', password: 'teste123', administrador: 'false' }
     * def fakeId = 'abcd1234abcd1234'
     Given path 'usuarios', fakeId
     And request payload
