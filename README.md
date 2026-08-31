@@ -26,7 +26,7 @@ Automatizar las operaciones CRUD de usuarios (`GET`, `POST`, `PUT`, `DELETE`) cu
 Clona el repositorio y, desde la raíz del proyecto, ejecuta:
 
 ```
-mvn clean test
+./mvnw clean test
 ```
 
 Esto compila el proyecto y ejecuta 14 escenarios en total (13 correspondientes a los 11 casos de la matriz, más 1 del feature auxiliar de creación de usuario), generando automáticamente un reporte HTML.
